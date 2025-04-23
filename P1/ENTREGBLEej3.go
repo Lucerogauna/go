@@ -5,13 +5,26 @@ import ("fmt"
 "strings"
 "unicode")
 
-func limpiarPalabra(palabra string) (letras string, signos string) {
+func limpiarPalabra(palabra string) (letras string, signos string, atras bool) {
 	runes := []rune(palabra)
-	i := len(runes) - 1 //Hola.. i=5 // desde el final de la palabra
-	for i >= 0 && !unicode.IsLetter(runes[i]) { //se ejecuta mientras sea un signo
-		i--
+	if !unicode.IsLetter(runes[len(runes)-1]){ // si tiene un caracter especial la ultima pos
+		i := len(runes) - 1 //Hola.. i=5 // desde el final de la palabra
+		for i >= 0 && !unicode.IsLetter(runes[i]) { //se ejecuta mientras sea un signo
+			i--
+		}
+		return string(runes[:i+1]), string(runes[i+1:]), true
+	//1 devuelve desde el principio hasta la ultima letra inclusive
+	//2 desde e caracter hasta el final
 	}
-	return string(runes[:i+1]), string(runes[i+1:])
+	 if !unicode.IsLetter(runes[0]){ // me fijo si tiene puntos adelante
+		i:= 0
+		for i <len(runes) && !unicode.IsLetter(runes[i]){
+			i++
+		}
+		return string(runes[i:]), string(runes[:i]), false
+	}
+
+	return palabra, "", true
 	//1 devuelve desde el principio hasta la ultima letra inclusive
 	//2 desde e caracter hasta el final
 }
@@ -45,7 +58,7 @@ func main (){
 	fmt.Println(word)
     // You can get individual args with normal indexing.
 
-   
+   //var estaAlFinal bool
 	fmt.Println("lee una frase")
 	frase, _ = reader.ReadString('\n') //lee la frase por teclado
 
@@ -55,15 +68,18 @@ func main (){
 	for i, palabra := range partes{
 		//divido la palabra en 2 strings, uno con la palabra limpia y el otro solo signos
 
-		palabraLimpia, signos:= limpiarPalabra(palabra)
+		palabraLimpia, signos, estaAlFinal:= limpiarPalabra(palabra)
 
 		//OTRA OPCION if  pasarMinuscula(palabraLimpia) == wordEnMin{ // a la palabra la paso en minuscula para comparar
 		//con equalFold se ve mas limpio y no hace falta declarar variables extras como wordEnMin
 		
 		if strings.EqualFold(palabraLimpia, word){ // si la palabra limpia es igual a la palabra pasada por arg (sin importar las min y mayus)
 			palabraLimpia = modificarMayusculasYMinusculas(palabraLimpia) 
-			partes[i] = palabraLimpia + signos // guardo la palabra de esa posicion ya modificada
-		}
+			if (estaAlFinal == true){
+				partes[i] = palabraLimpia + signos // guardo la palabra de esa posicion ya modificada
+			}else{
+				partes[i] = signos + palabraLimpia }	
+			}
 	} //del  for principal
 	                                                                                                                                
 	nueva := strings.Join(partes, " ")
