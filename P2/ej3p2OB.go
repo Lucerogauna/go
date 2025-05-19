@@ -62,7 +62,7 @@ func FrontElement(o OptimumSlice) int {
 
 //inciso v
 func LastElement(o OptimumSlice) int {
-	if IsEmpty(o){
+	if IsEmpty(o.Info){
 		return -1 // o algo que indique vacío
 	}
 
@@ -73,6 +73,16 @@ func LastElement(o OptimumSlice) int {
 
 //inciso vi
 func Insert(o OptimumSlice, element int, position int) int
+var nuevo OptimumSlice
+if position == len(o.Info){
+	resultado.Info= append (resultado.Info, Elemento{nroAct,cont})
+return len(o.Info) //slice interno que guarda los Elemento
+}
+if position > len(o.Info)|| pos < 0{
+	//pos invalida (fuera de rango)
+return 0
+}
+
 
 
 func main(){
