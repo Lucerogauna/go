@@ -49,7 +49,9 @@ func modificarMayusculasYMinusculas(palabra string) string {
 }
 
 func main() {
-	if len(os.Args) < 2 {
+	//controla que se pase un argumento al programa
+	//puede ser len(os.Args) < 2 , ya que se pasa nombre del programa y palabra
+	if len(os.Args) <= 1 {
 		fmt.Println("Error: Tenes que pasar una palabra como argumento.")
 		fmt.Println("Ejemplo: go run programa.go pequeño")
 		return
