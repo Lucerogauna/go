@@ -15,19 +15,21 @@ func limpiarPalabra(palabra string) (letras string, signos string, atras bool) {
 		return string(runes[:i+1]), string(runes[i+1:]), true
 	//1 devuelve desde el principio hasta la ultima letra inclusive
 	//2 desde e caracter hasta el final
+	//3 un true porque estaban atras
 	}
-	 if !unicode.IsLetter(runes[0]){ // me fijo si tiene puntos adelante
+	 if !unicode.IsLetter(runes[0]){ // me fijo si tiene puntos/signos adelante
 		i:= 0
 		for i <len(runes) && !unicode.IsLetter(runes[i]){
 			i++
 		}
 		return string(runes[i:]), string(runes[:i]), false
 	}
-
-	return palabra, "", true
 	//1 devuelve desde el principio hasta la ultima letra inclusive
 	//2 desde e caracter hasta el final
+	//3 dalse porque los signos estan adelante
 }
+	// si no tiene signos ni adelante ni atrás, la devuelvo tal cual
+	return palabra, "", true
 
 func pasarMinuscula (palabra string) string{
 	aux := [] rune (palabra)
@@ -54,27 +56,24 @@ func main (){
 	//var word string
 	var frase string
 	reader:= bufio.NewReader(os.Stdin)
-    word := os.Args[1] //guardo la palabra como argumento
+    word := os.Args[1] //guardo la palabra que viene como argumento por consola
 	fmt.Println(word)
-    // You can get individual args with normal indexing.
 
-   //var estaAlFinal bool
+	
 	fmt.Println("lee una frase")
 	frase, _ = reader.ReadString('\n') //lee la frase por teclado
 
 	partes := strings.Fields(frase)
-	//wordEnMin := pasarMinuscula(word) //  caso limite por ej: quiero ingresar una palabra en mayuscula 
 
 	for i, palabra := range partes{
 		//divido la palabra en 2 strings, uno con la palabra limpia y el otro solo signos
 
 		palabraLimpia, signos, estaAlFinal:= limpiarPalabra(palabra)
 
-		//OTRA OPCION if  pasarMinuscula(palabraLimpia) == wordEnMin{ // a la palabra la paso en minuscula para comparar
-		//con equalFold se ve mas limpio y no hace falta declarar variables extras como wordEnMin
-		
+		 //equals compara la palabra sin importar las min y mayus
 		if strings.EqualFold(palabraLimpia, word){ // si la palabra limpia es igual a la palabra pasada por arg (sin importar las min y mayus)
 			palabraLimpia = modificarMayusculasYMinusculas(palabraLimpia) 
+			//vuelvo a armar la palabra con los signos 
 			if (estaAlFinal == true){
 				partes[i] = palabraLimpia + signos // guardo la palabra de esa posicion ya modificada
 			}else{
